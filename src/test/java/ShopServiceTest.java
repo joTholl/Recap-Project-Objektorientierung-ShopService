@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShopServiceTest {
-    ShopService shopService = new ShopService();
+    ShopService shopService = new ShopService(new ProductRepo(),new OrderMapRepo());
 
     @Test
     void addOrderTest() {
