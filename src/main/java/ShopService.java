@@ -38,4 +38,19 @@ public class ShopService {
         orderRepo.addOrder(order);
 
     }
+
+    public Map<OrderStatus, Order> getOldestOrderPerStatus() {
+        Map<OrderStatus, Order> oldestOrders = new HashMap<>();
+        for (OrderStatus orderStatus : OrderStatus.values()) {
+            List<Order> orders = getOrdersByOrderStatus(orderStatus);
+            Order min = orders.get(0);
+            for (Order order : orders) {
+                if (order.timeOfOrder().isBefore(min.timeOfOrder())) {
+                    min = order;
+                }
+            }
+            oldestOrders.put(orderStatus, min);
+        }
+        return oldestOrders;
+    }
 }
