@@ -1,22 +1,24 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShopServiceTest {
+    ShopService shopService = new ShopService();
 
     @Test
     void addOrderTest() {
         //GIVEN
-        ShopService shopService = new ShopService();
+
         List<String> productsIds = List.of("1");
 
         //WHEN
         Order actual = shopService.addOrder(productsIds);
 
         //THEN
-        Order expected = new Order("-1", List.of(new Product("1", "Apfel")));
+        Order expected = new Order("-1", List.of(new Product("1", "Apfel")), OrderStatus.PROCESSING);
         assertEquals(expected.products(), actual.products());
         assertNotNull(expected.id());
     }
@@ -24,7 +26,7 @@ class ShopServiceTest {
     @Test
     void addOrderTest_whenInvalidProductId_expectNull() {
         //GIVEN
-        ShopService shopService = new ShopService();
+
         List<String> productsIds = List.of("1", "2");
 
         //WHEN
@@ -32,5 +34,12 @@ class ShopServiceTest {
 
         //THEN
         assertNull(actual);
+    }
+
+    @Test
+    void getOrdersByOrderStatusTest() {
+        Order order = shopService.addOrder(List.of("1"));
+        assertEquals(List.of(order), shopService.getOrdersByOrderStatus(OrderStatus.PROCESSING));
+        assertEquals(new ArrayList<Order>(), shopService.getOrdersByOrderStatus(OrderStatus.COMPLETED));
     }
 }
