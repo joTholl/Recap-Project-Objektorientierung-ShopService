@@ -31,7 +31,7 @@ class ShopServiceTest {
         List<String> productsIds = List.of("1", "2");
 
         //THEN
-        assertThrows(NoSuchElementException.class,() ->shopService.addOrder(productsIds));
+        assertThrows(NoSuchElementException.class, () -> shopService.addOrder(productsIds));
     }
 
     @Test
@@ -40,4 +40,14 @@ class ShopServiceTest {
         assertEquals(List.of(order), shopService.getOrdersByOrderStatus(OrderStatus.PROCESSING));
         assertEquals(new ArrayList<Order>(), shopService.getOrdersByOrderStatus(OrderStatus.COMPLETED));
     }
+
+    @Test
+    void updateOrderTest() {
+        Order order = shopService.addOrder(List.of("1"));
+        String id = order.id();
+        shopService.updateOrder(id, OrderStatus.IN_DELIVERY);
+        order = order.withOrderStatus(OrderStatus.IN_DELIVERY);
+        assertEquals(List.of(order), shopService.getOrdersByOrderStatus(OrderStatus.IN_DELIVERY));
+    }
+
 }

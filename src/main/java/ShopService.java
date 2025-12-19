@@ -9,7 +9,7 @@ public class ShopService {
         for (String productId : productIds) {
             Optional<Product> productToOrder = productRepo.getProductById(productId);
             if (productToOrder.isEmpty()) {
-                throw  new NoSuchElementException("Product not found, Id: " + productId);
+                throw new NoSuchElementException("Product not found, Id: " + productId);
             }
             products.add(productToOrder.get());
         }
@@ -24,6 +24,14 @@ public class ShopService {
         return orders.stream()
                 .filter(order -> order.orderStatus() == orderStatus)
                 .toList();
+
+    }
+
+    public void updateOrder(String orderId, OrderStatus newOrderStatus) {
+        Order order = orderRepo.getOrderById(orderId);
+        orderRepo.removeOrder(orderId);
+        order = order.withOrderStatus(newOrderStatus);
+        orderRepo.addOrder(order);
 
     }
 }
